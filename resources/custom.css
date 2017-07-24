@@ -1,0 +1,243 @@
+#matrix-container {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: auto;
+  border: 1px solid grey;
+  border-radius: 10px;
+  padding: 5%; }
+  #matrix-container .grid-quad {
+    display: block;
+    position: relative;
+    width: 50%;
+    height: 35vw;
+    border: 1px solid grey;
+    border-radius: 10px;
+    float: left;
+    padding: 0;
+    background-color: #D8D8D8; }
+  #matrix-container .quad-label {
+    display: block;
+    position: absolute;
+    font-size: 16px;
+    line-height: 18px;
+    color: #4A4A4A;
+    text-align: center; }
+  #matrix-container .pm-gridlabel-do-state {
+    top: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%); }
+  #matrix-container .pm-gridlabel-vertical {
+    top: 50%;
+    left: 0;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); }
+  #matrix-container .pm-rotate {
+    display: block;
+    position: relative;
+    -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+    -webkit-transform-origin: center center;
+            transform-origin: center center;
+    left: 9px; }
+  #matrix-container .done-area {
+    display: block;
+    position: relative;
+    padding: 0;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    background-color: #EEEEEE;
+    height: 20vw;
+    width: 100%;
+    margin: 0;
+    float: left; }
+  #matrix-container .zone-status {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 5px dashed #D8D8D8;
+    border-radius: 20px;
+    transition: all 1s; }
+  #matrix-container .drop-active .zone-status {
+    border: 5px dashed #C0C0C0;
+    transition: all 0.1s; }
+  #matrix-container .drop-target .zone-status {
+    border: 5px dashed #404040;
+    transition: all 1s; }
+  #matrix-container .dropzone {
+    padding: 10px; }
+
+.drag-todo {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 85px;
+  height: 150px;
+  background-color: #FFFFFF;
+  border: 1px solid #BBBBBB;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  padding: 2px;
+  overflow: hidden;
+  z-index: 10px; }
+  .drag-todo .inner-border {
+    display: block;
+    position: relative;
+    border-radius: 5px;
+    padding: 2px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; }
+  .drag-todo .todo-title {
+    display: block;
+    position: relative;
+    font-size: 14px;
+    color: #4A4A4A;
+    pointer-events: none; }
+  .drag-todo .todo-content {
+    display: block;
+    position: relative;
+    font-size: 8px;
+    pointer-events: none; }
+  .drag-todo .status-border {
+    display: none;
+    position: absolute;
+    border: 1px solid #0000BB;
+    border-radius: 5px;
+    padding: 2px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; }
+  .drag-todo .update-border {
+    display: none;
+    position: absolute;
+    border: 2px solid #00CC00;
+    border-radius: 5px;
+    padding: 2px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; }
+  .drag-todo.active {
+    z-index: 20;
+    box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.3); }
+    .drag-todo.active .status-border {
+      display: block;
+      position: absolute;
+      border: 1px solid #0000BB;
+      pointer-events: none; }
+  .drag-todo .pm-todo-label {
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    border-radius: 0 0 5px 5px;
+    background-color: #FFFFFF;
+    pointer-events: none;
+    z-index: 5; }
+    .drag-todo .pm-todo-label.unlabeled {
+      background-color: #FFFFFF; }
+    .drag-todo .pm-todo-label.red {
+      background-color: #FF0000; }
+    .drag-todo .pm-todo-label.orange {
+      background-color: #FFA600; }
+    .drag-todo .pm-todo-label.green {
+      background-color: #00E40E; }
+
+#todo-set {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #CACDFF;
+  border-radius: 5px; }
+
+div.drag-todo {
+  display: block; }
+
+#main {
+  border: 1px solid #EEEEEE;
+  border-radius: 5px; }
+
+#post-updated {
+  display: inline-block;
+  position: relative;
+  padding: 5px 10px;
+  border: 1px solid #76BE90;
+  border-radius: 5px;
+  background-color: #DAFFE7; }
+
+#new-todo {
+  border: 1px solid #76BE90;
+  background-color: #DAFFE7; }
+
+#edit-todo-mode {
+  border: 1px solid #76BE90;
+  background-color: #DAFFE7; }
+
+#controls-wrap {
+  display: block;
+  position: relative;
+  padding: 15px 0; }
+  #controls-wrap a, #controls-wrap a:hover, #controls-wrap a:active, #controls-wrap a:focus {
+    outline: 0; }
+  #controls-wrap ul.nav-tabs {
+    margin-left: 0; }
+    #controls-wrap ul.nav-tabs > li {
+      margin-bottom: -2px; }
+      #controls-wrap ul.nav-tabs > li > a, #controls-wrap ul.nav-tabs > li a:hover, #controls-wrap ul.nav-tabs > li a:active, #controls-wrap ul.nav-tabs > li a:focus {
+        color: #555; }
+      #controls-wrap ul.nav-tabs > li > a.tab-control {
+        color: #555;
+        border-left: 1px solid #979797;
+        border-top: 1px solid #979797;
+        border-right: 1px solid #979797;
+        background-color: #B8B8B8; }
+      #controls-wrap ul.nav-tabs > li.active a.tab-control {
+        background-color: #D8D8D8; }
+  #controls-wrap .tab-content .tab-pane {
+    padding: 10px 0 10px 15px;
+    border: 1px solid #979797;
+    background-color: #D8D8D8;
+    width: 530px;
+    text-align: left; }
+    #controls-wrap .tab-content .tab-pane form.form-inline {
+      display: inline-block;
+      margin: 0 auto; }
+  #controls-wrap #edit-todo-title,
+  #controls-wrap #new-todo-title {
+    min-width: 350px; }
+
+.matrix-control {
+  display: inline-block;
+  position: relative;
+  padding: 0 13.5px;
+  border: 1px solid #76BE90;
+  border-radius: 5px;
+  background-color: #DAFFE7;
+  height: 45px;
+  line-height: 45px;
+  float: right;
+  margin-right: 15px; }
+  .matrix-control:first-of-type {
+    margin-right: 0; }
+
+#errorconsole {
+  display: inline-block;
+  position: relative;
+  color: #FF0000;
+  font-size: 20px; }
+
+.console-errors-wrap {
+  display: block;
+  position: relative;
+  height: 25px; }
+/*# sourceMappingURL=custom.css.map */
