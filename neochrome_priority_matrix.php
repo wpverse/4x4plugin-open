@@ -39,7 +39,6 @@ if (!function_exists('write_log')) {
 function ncpm_scripts() {
 	wp_register_style( 'ncpm.css', plugin_dir_url( __FILE__ ) . 'resources/custom.css', array() );
 	wp_enqueue_style( 'ncpm.css');
-	wp_enqueue_style( 'ncpm-style', get_stylesheet_uri() );
 
 
 	wp_enqueue_style( 'bootstrap-css','https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',array(),'3.3.7' );
@@ -126,7 +125,7 @@ function pm_update_todo() {
 	$user_id = $_REQUEST['user_id'];
 	$post_id = $_REQUEST['post_id'];
 	$title = $_REQUEST['title'];
-	$label = $_REQUEST['label'];
+	$pmFilter = $_REQUEST['pm_filter'];
 	$response = 'failed';
 
 	$logged_in_id = get_current_user_id();
@@ -140,7 +139,7 @@ function pm_update_todo() {
 
 		$update_post = wp_update_post($post_args);
 		if ($update_post){
-			update_post_meta($post_id,'pm_label',$label );
+			update_post_meta($post_id,'pm_filter',$pmFilter );
 			$response = 'postUpdated';
 		} else {
 			write_log('update todo failed');
@@ -179,7 +178,7 @@ function pm_new_todo() {
 	$user_id = $_REQUEST['user_id'];
 	//$post_id = $_REQUEST['post_id'];
 	$title = $_REQUEST['title'];
-	$label = $_REQUEST['label'];
+	$pmFilter = $_REQUEST['pm_filter'];
 	$response = 'failed';
 
 	$logged_in_id = get_current_user_id();
@@ -193,7 +192,7 @@ function pm_new_todo() {
 
 		$new_post = wp_insert_post($post_args);
 		if ($new_post){
-			update_post_meta($new_post,'pm_label',$label );
+			update_post_meta($new_post,'pm_filter',$pmFilter );
 			update_post_meta($new_post,'x_pos','50' );
 			update_post_meta($new_post,'y_pos','50' );
 			$response = $new_post;
@@ -278,3 +277,67 @@ function pm_update_position() {
 	exit();
 
 }
+
+
+
+
+add_action( 'wp_ajax_pm_update_filters', 'pm_update_filters' );
+add_action( 'wp_ajax_nopriv_pm_update_filters', 'pm_update_filters' );
+
+function pm_update_filters() {
+	write_log('doing pm_update_filters');
+	$user_id = $_REQUEST['user_id'];
+	$npm_filter_one_label = $_REQUEST['npm_filter_one_label'];
+	$npm_filter_one_color = $_REQUEST['npm_filter_one_color'];
+	$npm_filter_two_label = $_REQUEST['npm_filter_two_label'];
+	$npm_filter_two_color = $_REQUEST['npm_filter_two_label'];
+	$npm_filter_three_label = $_REQUEST['npm_filter_three_label'];
+	$npm_filter_three_color = $_REQUEST['npm_filter_three_label'];
+	$npm_active_filter = $_REQUEST['npm_active_filter'];
+	$response = 0;
+
+	$logged_in_id = get_current_user_id();
+
+	if ($user_id == $logged_in_id){
+		write_log('doing filters update');
+
+		$updated_npm_filter_one_label = update_option( 'npm_filter_one_label',$npm_filter_one_label );
+		$updated_npm_filter_one_color = update_option( 'npm_filter_one_color',$npm_filter_one_color );
+		$updated_npm_filter_two_label = update_option( 'npm_filter_two_label',$npm_filter_two_label );
+		$updated_npm_filter_two_color = update_option( 'npm_filter_two_color',$npm_filter_two_color );
+		$updated_npm_filter_three_label = update_option( 'npm_filter_three_label',$npm_filter_three_label );
+		$updated_npm_filter_three_color = update_option( 'npm_filter_three_color',$npm_filter_three_color );
+		$npm_active_filter = update_option( 'npm_active_filter', $npm_active_filter);
+
+		if ($updated_npm_filter_one_label && $updated_npm_filter_one_color && $updated_npm_filter_two_label && $updated_npm_filter_two_color && $updated_npm_filter_three_label && $updated_npm_filter_three_color){
+			write_log('npm_filters_updated');
+			$response = 'updated';
+		}
+
+	} else {
+		write_log('updating failed');
+		$response = 'badId';
+	}
+
+	$reply = new WP_Ajax_Response;
+
+	write_log('$response:'.$response);
+
+	$reply->add( array(
+		'data' => 'recieved',
+		'supplemental' => array(
+			'status' => $response,
+			)
+		));
+
+	$reply->send();
+
+	exit();
+
+}
+
+
+
+
+
+

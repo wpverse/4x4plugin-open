@@ -1,12 +1,62 @@
-#matrix-container {
+#npm_plugin_wrap.npm_content_container #pm-error-notice {
+  display: none;
+  position: relative;
+  font-size: 20px;
+  line-height: 36px;
+  height: 36px;
+  color: black;
+  padding: 0 0 5px 10px;
+  margin-bottom: 10px;
+  background-color: #FBF177; }
+
+#npm_plugin_wrap.npm_content_container #controls-wrap {
+  display: block;
+  position: relative;
+  padding: 0 0 5px 0; }
+  #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap {
+    display: block;
+    position: relative; }
+    #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap a, #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap a:hover, #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap a:active, #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap a:focus {
+      outline: 0; }
+    #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs {
+      margin-left: 0;
+      padding: 0;
+      margin-bottom: 0;
+      border-bottom: none; }
+      #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li {
+        margin-bottom: -2px; }
+        #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li > a, #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li a:hover, #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li a:active, #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li a:focus {
+          color: #555; }
+        #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li > a.tab-control {
+          color: #555;
+          border-left: 1px solid #979797;
+          border-top: 1px solid #979797;
+          border-right: 1px solid #979797;
+          background-color: #B8B8B8; }
+        #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap ul.nav-tabs > li.active a.tab-control {
+          background-color: #D8D8D8; }
+    #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap .tab-content .tab-pane {
+      padding: 10px 0 10px 15px;
+      border: 1px solid #979797;
+      background-color: #D8D8D8;
+      width: 530px;
+      text-align: left; }
+      #npm_plugin_wrap.npm_content_container #controls-wrap .npm-header-wrap .tab-content .tab-pane form.form-inline {
+        display: inline-block;
+        margin: 0 auto; }
+  #npm_plugin_wrap.npm_content_container #controls-wrap #edit-todo-title,
+  #npm_plugin_wrap.npm_content_container #controls-wrap #new-todo-title {
+    min-width: 350px; }
+
+#npm_plugin_wrap.npm_content_container #matrix-container {
   display: block;
   position: relative;
   width: 100%;
   height: auto;
   border: 1px solid grey;
   border-radius: 10px;
-  padding: 5%; }
-  #matrix-container .grid-quad {
+  padding: 2%; }
+  #npm_plugin_wrap.npm_content_container #matrix-container .grid-quad {
     display: block;
     position: relative;
     width: 50%;
@@ -16,24 +66,24 @@
     float: left;
     padding: 0;
     background-color: #D8D8D8; }
-  #matrix-container .quad-label {
+  #npm_plugin_wrap.npm_content_container #matrix-container .quad-label {
     display: block;
     position: absolute;
     font-size: 16px;
     line-height: 18px;
     color: #4A4A4A;
     text-align: center; }
-  #matrix-container .pm-gridlabel-do-state {
+  #npm_plugin_wrap.npm_content_container #matrix-container .pm-gridlabel-do-state {
     top: 0;
     left: 50%;
     -webkit-transform: translateX(-50%);
             transform: translateX(-50%); }
-  #matrix-container .pm-gridlabel-vertical {
+  #npm_plugin_wrap.npm_content_container #matrix-container .pm-gridlabel-vertical {
     top: 50%;
     left: 0;
     -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%); }
-  #matrix-container .pm-rotate {
+  #npm_plugin_wrap.npm_content_container #matrix-container .pm-rotate {
     display: block;
     position: relative;
     -webkit-transform: rotate(-90deg);
@@ -41,7 +91,7 @@
     -webkit-transform-origin: center center;
             transform-origin: center center;
     left: 9px; }
-  #matrix-container .done-area {
+  #npm_plugin_wrap.npm_content_container #matrix-container .done-area, #npm_plugin_wrap.npm_content_container #matrix-container .backlog-area {
     display: block;
     position: relative;
     padding: 0;
@@ -52,7 +102,7 @@
     width: 100%;
     margin: 0;
     float: left; }
-  #matrix-container .zone-status {
+  #npm_plugin_wrap.npm_content_container #matrix-container .zone-status {
     display: block;
     position: relative;
     width: 100%;
@@ -60,16 +110,16 @@
     border: 5px dashed #D8D8D8;
     border-radius: 20px;
     transition: all 1s; }
-  #matrix-container .drop-active .zone-status {
+  #npm_plugin_wrap.npm_content_container #matrix-container .drop-active .zone-status {
     border: 5px dashed #C0C0C0;
     transition: all 0.1s; }
-  #matrix-container .drop-target .zone-status {
+  #npm_plugin_wrap.npm_content_container #matrix-container .drop-target .zone-status {
     border: 5px dashed #404040;
     transition: all 1s; }
-  #matrix-container .dropzone {
+  #npm_plugin_wrap.npm_content_container #matrix-container .dropzone {
     padding: 10px; }
 
-.drag-todo {
+#npm_plugin_wrap.npm_content_container .drag-todo {
   display: block;
   position: absolute;
   top: 0;
@@ -83,7 +133,7 @@
   padding: 2px;
   overflow: hidden;
   z-index: 10px; }
-  .drag-todo .inner-border {
+  #npm_plugin_wrap.npm_content_container .drag-todo .inner-border {
     display: block;
     position: relative;
     border-radius: 5px;
@@ -91,18 +141,18 @@
     width: 100%;
     height: 100%;
     pointer-events: none; }
-  .drag-todo .todo-title {
+  #npm_plugin_wrap.npm_content_container .drag-todo .todo-title {
     display: block;
     position: relative;
     font-size: 14px;
     color: #4A4A4A;
     pointer-events: none; }
-  .drag-todo .todo-content {
+  #npm_plugin_wrap.npm_content_container .drag-todo .todo-content {
     display: block;
     position: relative;
     font-size: 8px;
     pointer-events: none; }
-  .drag-todo .status-border {
+  #npm_plugin_wrap.npm_content_container .drag-todo .status-border {
     display: none;
     position: absolute;
     border: 1px solid #0000BB;
@@ -113,7 +163,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none; }
-  .drag-todo .update-border {
+  #npm_plugin_wrap.npm_content_container .drag-todo .update-border {
     display: none;
     position: absolute;
     border: 2px solid #00CC00;
@@ -124,15 +174,15 @@
     width: 100%;
     height: 100%;
     pointer-events: none; }
-  .drag-todo.active {
+  #npm_plugin_wrap.npm_content_container .drag-todo.active {
     z-index: 20;
     box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.3); }
-    .drag-todo.active .status-border {
+    #npm_plugin_wrap.npm_content_container .drag-todo.active .status-border {
       display: block;
       position: absolute;
       border: 1px solid #0000BB;
       pointer-events: none; }
-  .drag-todo .pm-todo-label {
+  #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label {
     display: block;
     position: absolute;
     bottom: 0px;
@@ -143,16 +193,16 @@
     background-color: #FFFFFF;
     pointer-events: none;
     z-index: 5; }
-    .drag-todo .pm-todo-label.unlabeled {
+    #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.unlabeled {
       background-color: #FFFFFF; }
-    .drag-todo .pm-todo-label.red {
+    #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.filter-one {
       background-color: #FF0000; }
-    .drag-todo .pm-todo-label.orange {
+    #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.filter-two {
       background-color: #FFA600; }
-    .drag-todo .pm-todo-label.green {
+    #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.filter-three {
       background-color: #00E40E; }
 
-#todo-set {
+#npm_plugin_wrap.npm_content_container #todo-set {
   display: block;
   position: absolute;
   top: 0;
@@ -160,14 +210,14 @@
   border: 1px solid #CACDFF;
   border-radius: 5px; }
 
-div.drag-todo {
+#npm_plugin_wrap.npm_content_container div.drag-todo {
   display: block; }
 
-#main {
+#npm_plugin_wrap.npm_content_container #main {
   border: 1px solid #EEEEEE;
   border-radius: 5px; }
 
-#post-updated {
+#npm_plugin_wrap.npm_content_container #post-updated {
   display: inline-block;
   position: relative;
   padding: 5px 10px;
@@ -175,48 +225,15 @@ div.drag-todo {
   border-radius: 5px;
   background-color: #DAFFE7; }
 
-#new-todo {
+#npm_plugin_wrap.npm_content_container #new-todo {
   border: 1px solid #76BE90;
   background-color: #DAFFE7; }
 
-#edit-todo-mode {
+#npm_plugin_wrap.npm_content_container #edit-todo-mode {
   border: 1px solid #76BE90;
   background-color: #DAFFE7; }
 
-#controls-wrap {
-  display: block;
-  position: relative;
-  padding: 15px 0; }
-  #controls-wrap a, #controls-wrap a:hover, #controls-wrap a:active, #controls-wrap a:focus {
-    outline: 0; }
-  #controls-wrap ul.nav-tabs {
-    margin-left: 0; }
-    #controls-wrap ul.nav-tabs > li {
-      margin-bottom: -2px; }
-      #controls-wrap ul.nav-tabs > li > a, #controls-wrap ul.nav-tabs > li a:hover, #controls-wrap ul.nav-tabs > li a:active, #controls-wrap ul.nav-tabs > li a:focus {
-        color: #555; }
-      #controls-wrap ul.nav-tabs > li > a.tab-control {
-        color: #555;
-        border-left: 1px solid #979797;
-        border-top: 1px solid #979797;
-        border-right: 1px solid #979797;
-        background-color: #B8B8B8; }
-      #controls-wrap ul.nav-tabs > li.active a.tab-control {
-        background-color: #D8D8D8; }
-  #controls-wrap .tab-content .tab-pane {
-    padding: 10px 0 10px 15px;
-    border: 1px solid #979797;
-    background-color: #D8D8D8;
-    width: 530px;
-    text-align: left; }
-    #controls-wrap .tab-content .tab-pane form.form-inline {
-      display: inline-block;
-      margin: 0 auto; }
-  #controls-wrap #edit-todo-title,
-  #controls-wrap #new-todo-title {
-    min-width: 350px; }
-
-.matrix-control {
+#npm_plugin_wrap.npm_content_container .matrix-control {
   display: inline-block;
   position: relative;
   padding: 0 13.5px;
@@ -227,17 +244,37 @@ div.drag-todo {
   line-height: 45px;
   float: right;
   margin-right: 15px; }
-  .matrix-control:first-of-type {
+  #npm_plugin_wrap.npm_content_container .matrix-control:first-of-type {
     margin-right: 0; }
 
-#errorconsole {
+#npm_plugin_wrap.npm_content_container #npm-filter {
   display: inline-block;
-  position: relative;
-  color: #FF0000;
-  font-size: 20px; }
-
-.console-errors-wrap {
-  display: block;
-  position: relative;
-  height: 25px; }
+  position: absolute;
+  right: 15px;
+  bottom: 0;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px; }
+  #npm_plugin_wrap.npm_content_container #npm-filter .matrix-filter {
+    display: block;
+    position: relative;
+    padding: 2px 15px;
+    border: 1px solid transparent;
+    cursor: pointer; }
+    #npm_plugin_wrap.npm_content_container #npm-filter .matrix-filter.active {
+      border: 1px solid black; }
+    #npm_plugin_wrap.npm_content_container #npm-filter .matrix-filter .matrix-filter-label {
+      display: block;
+      position: relative;
+      color: #FFFFFF;
+      font-size: 12px;
+      text-shadow: 0 0 3px #000000; }
+      #npm_plugin_wrap.npm_content_container #npm-filter .matrix-filter .matrix-filter-label:hover {
+        text-shadow: 0 0 6px #000000; }
+  #npm_plugin_wrap.npm_content_container #npm-filter #filter-one {
+    background-color: #D0021B; }
+  #npm_plugin_wrap.npm_content_container #npm-filter #filter-two {
+    background-color: #F5A623; }
+  #npm_plugin_wrap.npm_content_container #npm-filter #filter-three {
+    background-color: #7ED321; }
 /*# sourceMappingURL=custom.css.map */

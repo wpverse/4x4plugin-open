@@ -1,290 +1,311 @@
 jQuery(document).ready(function() {
-	console.log('Main.js Loaded');
-  var activeTodo = '';
-  var editFormStatus = '';
-  var newFormStatus = '';
-  var tryAjaxAgain = '';
+  var  gridContainer = document.getElementById('matrix-container');
+  if (gridContainer){
 
-  userId = jQuery('#matrix-container').data('userid');
+    console.log('Main.js Loaded');
+    var activeTodo = '';
+    var editFormHasBeenChanged = '';
+    var editFormTryAjaxAgain = '';
+    var newFormStatus = '';
+    var newFormTryAjaxAgain = '';
+    var updateFiltersStatus = '';
+    var updateFiltersTryAjaxAgain = '';
 
-  var resizeTimer;
-  jQuery(window).on('resize', function(e) {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      repositionAllFromSavedPercentage();
-    }, 250);
-  });
+    var toDoBacklogArea = document.getElementById('todo-backlog-area');
+    var urgentImportant = document.getElementById('urgent-important');
+    var notUrgentImportant = document.getElementById('not-urgent-important');
+    var urgentNotImportant = document.getElementById('urgent-not-important');
+    var notUrgentNotImportant = document.getElementById('not-urgent-not-important');
+    var todoDoneArea = document.getElementById('todo-done-area');
 
-  function repositionAllFromSavedPercentage(){
-    console.log('repositionAllFromSavedPercentage()');
-    var gridH = jQuery('#matrix-container').height();
-    var gridW = jQuery('#matrix-container').width();
-    var todo = '';
-    var todo = jQuery('.drag-todo');
-    var xpos = '';
-    var ypos = '';
-    jQuery('.drag-todo').each(function(event){
-     var item = document.getElementById(jQuery(this).attr('id'));
-     var xpos = item.dataset.xpos;
-     var ypos = item.dataset.ypos;
-     if (!xpos){
-      var xTrans = 0.1;
+
+    userId = jQuery('#matrix-container').data('userid');
+
+    if(userId == false || userId == null){
+      displayNotice('You are not Logged-in. Please login to make changes.','User not logged-in');
     } else {
-      var xTrans = (gridW * xpos) / 100;
-    }
-    if (!ypos){
-      var yTrans = 0.1;
-    } else {
-      var yTrans = (gridH * ypos) / 100;
-    }
-    item.setAttribute('data-x', xTrans);
-    item.setAttribute('data-y', yTrans);			
-    item.style.webkitTransform = 'translate(' + xTrans + 'px, ' + yTrans + 'px)';
-    item.style.transform = 'translate(' + xTrans + 'px, ' + yTrans + 'px)';
-  });
-  }
-
-  repositionAllFromSavedPercentage();
-
-  var dragContainer = document.getElementById('matrix-container');
-
-  interact('.draggable')
-  .draggable({
-    inertia: true,
-    restrict: {
-    	restriction: dragContainer,
-    	endOnly: true,
-    	elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-    },
-    autoScroll: true,
-    onmove: dragMoveListener,
-    onend: function (event) {
-    	console.log(event.target.dataset.postid);
-    	updatePosition(event.target.dataset.postid,event.target.dataset.xpos,event.target.dataset.ypos);
-
-      
-    }
-  });
-
-  function dragMoveListener(event) {
-    var target = event.target,
-    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-    target.style.webkitTransform =
-    target.style.transform =
-    'translate(' + x + 'px, ' + y + 'px)';
-    target.setAttribute('data-x', x);
-    target.setAttribute('data-y', y);
-    var gridH = jQuery('#matrix-container').height();
-    var gridW = jQuery('#matrix-container').width();
-    console.log('x: '+x+' y: '+y );
-    console.log('gridH: '+gridH+' gridW: '+gridW );
-    var xpos = (x / gridW) * 100;
-    var ypos = (y / gridH) * 100;
-    target.setAttribute('data-xpos', xpos);
-    target.setAttribute('data-ypos', ypos);
-    updateCurrentlyActive(event.target);
-  }
-  window.dragMoveListener = dragMoveListener;
-
-  jQuery('.grid-quad').click(function(){
-    selectNone();
-  });
-
-  jQuery('.drag-todo').click(function(){
-    updateCurrentlyActive(this);
-  });
-
-  jQuery('#pm_submit').click(function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    if (saveUpdateFormContents()){
-      selectNone();
-    } else {
-      displayError('saveUpdateFormContents() failed. Keeping current selection');
-    }
-  });
-
-  jQuery('#pm-form-edit-todo-panel input, #pm-form-edit-todo-panel select').on( 'input', function() {
-    console.log('edit form change');
-    editFormStatus = 'changed';
-  });
-
-  jQuery('#new_pm_submit').click(function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    if(!jQuery('#new-todo-title').val()){
-      jQuery('#new-todo-title').addClass('alert-danger').delay('200').removeClass('alert-danger');
+      displayNotice(null,'makeBoardDraggable()');
+      makeBoardDraggable();
+      displayNotice(null,'trying to unlock edit form');
+      unlockEditForm();
+      unlockNewForm();
     }
 
-    console.log('trying ajaxNewTodo()');
-    var newTodoError = ajaxNewTodo();
-    if (!newTodoError){
-     tryAjaxAgain++;
-     console.log(tryAjaxAgain);
-   }
+    containerSetup();
+
+    function containerSetup(){
+      gridQuadHeight = gridContainer.getBoundingClientRect().width * .35;
+      extraAreasHeight = gridContainer.getBoundingClientRect().width * .2;
+      toDoBacklogArea.style.height = extraAreasHeight+'px';
+      urgentImportant.style.height = gridQuadHeight+'px';
+      notUrgentImportant.style.height = gridQuadHeight+'px';
+      urgentNotImportant.style.height = gridQuadHeight+'px';
+      notUrgentNotImportant.style.height = gridQuadHeight+'px';
+      todoDoneArea.style.height = extraAreasHeight+'px';
+    }
 
 
- });
 
-  function selectNone(){
-    console.log('Click.. :remove ACTIVE');
-    jQuery('.drag-todo').removeClass('active');
-    updateCurrentlyActive();
-  }
+    setResizeListeners();
 
 
-  function saveUpdateFormContents(){
-    console.log('saveUpdateFormContents()');
-    if(activeTodo){
-      var checkUpdated = ajaxUpdateContent();
-      if(checkUpdated){
-        displayError('ajax update success');
-        return true;
+    repositionAllFromSavedPercentage();
+
+    function makeBoardDraggable(){
+      if (!userId){
+
       } else {
-        displayError('ajaxUpdateContent failed');
+        var dragContainer = document.getElementById('matrix-container');
+        interact('.draggable')
+        .draggable({
+          inertia: true,
+          restrict: {
+           restriction: dragContainer,
+           endOnly: true,
+           elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+         },
+         autoScroll: true,
+         onmove: dragMoveListener,
+         onend: function (event) {
+           console.log(event.target.dataset.postid);
+           updatePosition(event.target.dataset.postid,event.target.dataset.xpos,event.target.dataset.ypos);
+         }
+       });
+      }
+
+
+
+    }
+
+
+    function dragMoveListener(event) {
+      var target = event.target,
+      x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+      y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+      target.style.webkitTransform =
+      target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)';
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+      var gridH = jQuery('#matrix-container').height();
+      var gridW = jQuery('#matrix-container').width();
+      console.log('x: '+x+' y: '+y );
+      console.log('gridH: '+gridH+' gridW: '+gridW );
+      var xpos = (x / gridW) * 100;
+      var ypos = (y / gridH) * 100;
+      target.setAttribute('data-xpos', xpos);
+      target.setAttribute('data-ypos', ypos);
+      updateWhatsCurrentlyActive(event.target);
+    }
+    window.dragMoveListener = dragMoveListener;
+
+    jQuery('.grid-quad').click(function(){
+      selectNone();
+    });
+
+    jQuery('.drag-todo').click(function(){
+
+      if(userId == false || userId == null){
+        displayNotice('You are not Logged-in. Please login to make changes.','User not logged-in');
+        return;
+      }
+
+      updateWhatsCurrentlyActive(this);
+    });
+
+    jQuery('#edit_pm_submit').click(function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if (saveUpdateFormContents()){
+        selectNone();
+        clearFormEdit();
+      } else {
+        displayNotice('saveUpdateFormContents() failed. Keeping current selection', 'error returned from saveUpdateFormContents()');
+      }
+    });
+
+    jQuery('#pm-form-edit-todo-panel input, #pm-form-edit-todo-panel select').on( 'input', function() {
+      console.log('edit form change');
+
+      editFormHasBeenChanged = 'changed';
+    });
+
+    jQuery('#new_pm_submit').click(function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(!jQuery('#new-todo-title').val()){
+        jQuery('#new-todo-title').addClass('alert-danger').delay('200').removeClass('alert-danger');
+      }
+
+      console.log('trying ajaxNewTodo()');
+      var newTodoError = ajaxNewTodo();
+      if (!newTodoError){
+       updateFiltersTryAjaxAgain++;
+       console.log(updateFiltersTryAjaxAgain);
+     } else {
+      selectNone();
+      clearFormNew();      
+    }
+
+
+  });
+
+    function selectNone(){
+      console.log('Click.. :remove ACTIVE');
+      jQuery('.drag-todo').removeClass('active');
+      updateWhatsCurrentlyActive();
+      lockEditForm();
+    }
+
+
+    function saveUpdateFormContents(){
+      displayNotice(null,'doing save UpdateFormContents()');
+      todoElement = document.getElementById(activeTodo);
+      if(!todoElement){
+        displayNotice(null,'ajaxUpdateContent failed. No currently selected item');
         return false;
       }
-    } else {
-      displayError('saveUpdateFormContents() failed, no active selection');
-      return false;
-    }
-  }
-
-  function updatePosition(postId,xpos,ypos){
-    console.log('updatePosition(postId,xpos,ypos)');
-    var ajax_data = {
-      action: 'pm_update_position',
-      user_id : userId,
-      post_id : postId,
-      xpos: xpos,
-      ypos: ypos
-    }
-    jQuery.post( ajax_url, ajax_data, function(data){
-      var reply = jQuery( data ).find('data').text();
-      var status = jQuery( data ).find('status').text();
-      console.log('reply');
-      console.log(reply);
-      console.log('status');
-      console.log(status);
-      if(status){
-       console.log('inner- position updated');
-       jQuery('#post-updated').stop().fadeIn(300).fadeOut(1000);
-       var targetTodoId = '#drag-' + postId + ' .update-border';
-       jQuery(targetTodoId).fadeIn(100).fadeOut(600);
-       return true;
-     } else {
-       console.log('inner- position update failed!');
-       displayError('ajax position server update failed!');
-       return false;
-     }
-   });
-  }
-
-
-  function ajaxUpdateContent(todoId){
-    console.log('ajaxUpdateContent(todoId)');
-    if(!userId){
-      console.log('Not saving. User not logged-in');
-      return false;
-    }
-    todoElement = document.getElementById(activeTodo);
-    if(!todoElement){
-      console.log('ajaxUpdateContent failed. No currently selected item');
-      return false;
+      var p = ajaxUpdateContent();
+      return p.then(function(result){
+        if (result == false){
+          displayNotice(null,'level 2 fail');
+          console.log(result);
+        }
+        return result;
+      });
     }
 
-    var wpPostId = todoElement.dataset.postid;
 
-    var postId = 'drag-'+jQuery('#post_id').val();
-    var pmTitle = jQuery('#edit-todo-title').val();
-    var pmLabel = jQuery('select#todo-label').val();
 
-    jQuery('#'+activeTodo+' .pm-todo-label').removeClass('unlabeled red orange green');
-    jQuery('#'+activeTodo+' .pm-todo-label').addClass(pmLabel).data('label',pmLabel);
-    jQuery('#'+activeTodo+' .todo-title').html(pmTitle)
 
-    console.log('postId:'+postId);
-    console.log('wpPostId:'+wpPostId);
-
-    console.log('starting ajax content update');
-    var ajax_data = {
-      action: 'pm_update_todo',
-      post_id : wpPostId,
-      user_id : userId,
-      title : pmTitle,
-      label : pmLabel,
+    function updatePosition(postId,xpos,ypos){
+      console.log('updatePosition(postId,xpos,ypos)');
+      var ajax_data = {
+        action: 'pm_update_position',
+        user_id : userId,
+        post_id : postId,
+        xpos: xpos,
+        ypos: ypos
+      }
+      jQuery.post( ajax_url, ajax_data, function(data){
+        var reply = jQuery( data ).find('data').text();
+        var status = jQuery( data ).find('status').text();
+        console.log('reply');
+        console.log(reply);
+        console.log('status');
+        console.log(status);
+        if(status){
+         console.log('inner- position updated');
+         jQuery('#post-updated').stop().fadeIn(300).fadeOut(1000);
+         var targetTodoId = '#drag-' + postId + ' .update-border';
+         jQuery(targetTodoId).fadeIn(100).fadeOut(600);
+         return true;
+       } else {
+         console.log('inner- position update failed!');
+         displayNotice('Couldn\'t save position to server','ajax position server update failed!');
+         return false;
+       }
+     });
     }
 
-    jQuery.post( ajax_url, ajax_data, function(data){
-      var reply = jQuery( data ).find('data').text();
-      var status = jQuery( data ).find('status').text();
-      console.log('All:');
-      console.log(data);
 
-      if(status){
-       console.log('ajaxUpdateContent Content updated!');
-       editFormStatus = false;
-       return true;
-     } else {
+    function ajaxUpdateContent(){
+      displayNotice(null,'doing ajax Update Content()');
+      
+      if(!userId){
+        console.log('Not saving. User not logged-in');
+        return false;
+      }
 
-       displayError('ajaxUpdateContent Content update failed!');
-       displayError(status);
-       return false;
-     }
-   });
+      var wpPostId = todoElement.dataset.postid;
 
+      var postId = 'drag-'+jQuery('#post_id').val();
+      var pmTitle = jQuery('#edit-todo-title').val();
+      var pmFilter = jQuery('select#todo-label').val();
 
-  }
+      jQuery('#'+activeTodo+' .pm-todo-label').removeClass('unlabeled red orange green');
+      jQuery('#'+activeTodo+' .pm-todo-label').addClass(pmFilter).data('label',pmFilter);
+      jQuery('#'+activeTodo).removeClass('unlabeled filter-one filter-two filter-three');
+      jQuery('#'+activeTodo).addClass(pmFilter);
+      jQuery('#'+activeTodo+' .todo-title').html(pmTitle)
 
+      displayNotice(null,'starting ajax content update');
+      var ajax_data = {
+        action: 'pm_update_todo',
+        post_id : wpPostId,
+        user_id : userId,
+        title : pmTitle,
+        pm_filter : pmFilter,
+      }
 
+      var savingEdit = jQuery.post( ajax_url, ajax_data, function(data){
+        var reply = jQuery( data ).find('data').text();
+        var status = jQuery( data ).find('status').text();
+        console.log('All:');
+        console.log(status);
 
-  function ajaxNewTodo(){
-    console.log('ajaxNewTodo()');
-    if(!userId){
-      console.log('Not saving. User not logged-in');
-      displayError('Not saving. User not logged-in');
-      return;
+        if(status){
+          displayNotice(null,'server response ajax Update Content() true');
+          editFormHasBeenChanged = false;
+          return status;
+        } else {
+         displayNotice(null,'server response ajax Update Content() false');
+         return status;
+       }
+     });
+      return savingEdit.then(function(result){
+        var status = jQuery( result ).find('status').text();
+        return status;
+      });
+
     }
 
-    var pmTitle = jQuery('#new-todo-title').val();
-    var pmLabel = jQuery('select#new-todo-label').val();
 
-    console.log('starting ajax new todo');
-    var ajax_data = {
-      action: 'pm_new_todo',
-      user_id : userId,
-      title : pmTitle,
-      label : pmLabel,
+    function ajaxNewTodo(){
+      console.log('ajaxNewTodo()');
+      if(!userId){
+        displayNotice('Not saving. User not logged-in');
+        return;
+      }
+
+      var pmTitle = jQuery('#new-todo-title').val();
+      var pmFilter = jQuery('select#new-todo-label').val();
+
+      console.log('starting ajax new todo');
+      var ajax_data = {
+        action: 'pm_new_todo',
+        user_id : userId,
+        title : pmTitle,
+        pm_filter : pmFilter,
+      }
+      jQuery.post( ajax_url, ajax_data, function(data){
+        var reply = jQuery( data ).find('data').text();
+        var status = jQuery( data ).find('status').text();
+        console.log('All:');
+        console.log(data);
+        console.log('reply');
+        console.log(reply);
+        console.log('status');
+        console.log(status);
+        if(status){
+         console.log('New Todo Created!');
+         var pmTitle = jQuery('#new-todo-title').val();
+         var pmFilter = jQuery('select#new-todo-label').val();
+         var gridH = jQuery('#matrix-container').height();
+         var gridW = jQuery('#matrix-container').width();
+         var gridCenterX = gridW / 2;
+         var gridCenterY = gridH / 2;
+         var newPost = '<div id="drag-'+status+'" class="draggable drag-todo js-drag pm-activity dropzone yes-drop" data-postid="'+status+'" data-xpos="50" data-ypos="50" data-x="' + gridCenterX + '" data-y="' + gridCenterY + '" style="transform: translate(' + gridCenterX + 'px, ' + gridCenterY + 'px);"><div class="pm-todo-label ' + pmFilter + '" data-label="' + pmFilter + '"></div><div class="inner-border"><div class="todo-title">'+pmTitle+'</div></div></div><div class="update-border"><div class="status-border"></div></div>';
+         jQuery('#todo-set').append(newPost);
+         newFormStatus = false;
+         return status;
+       } else {
+         console.log('New todo Ajax failed!');
+         return false;
+       }
+     });
+
     }
-    jQuery.post( ajax_url, ajax_data, function(data){
-      var reply = jQuery( data ).find('data').text();
-      var status = jQuery( data ).find('status').text();
-      console.log('All:');
-      console.log(data);
-      console.log('reply');
-      console.log(reply);
-      console.log('status');
-      console.log(status);
-      if(status){
-       console.log('New Todo Created!');
-       var pmTitle = jQuery('#new-todo-title').val();
-       var pmLabel = jQuery('select#new-todo-label').val();
-       var gridH = jQuery('#matrix-container').height();
-       var gridW = jQuery('#matrix-container').width();
-       var gridCenterX = gridW / 2;
-       var gridCenterY = gridH / 2;
-       var newPost = '<div id="drag-'+status+'" class="draggable drag-todo js-drag pm-activity dropzone yes-drop" data-postid="'+status+'" data-xpos="50" data-ypos="50" data-x="' + gridCenterX + '" data-y="' + gridCenterY + '" style="transform: translate(' + gridCenterX + 'px, ' + gridCenterY + 'px);"><div class="pm-todo-label ' + pmLabel + '" data-label="' + pmLabel + '"></div><div class="inner-border"><div class="todo-title">'+pmTitle+'</div></div></div><div class="update-border"><div class="status-border"></div></div>';
-       jQuery('#todo-set').append(newPost);
-       newFormStatus = false;
-       return status;
-     } else {
-       console.log('New todo Ajax failed!');
-       return false;
-     }
-   });
-
-  }
 
   //jQuery(drag-todo).not(jQuery(this)).removeClass(active);
 
@@ -331,55 +352,74 @@ interact('.dropzone').dropzone({
   }
 });
 
+function updateWhatsCurrentlyActive(currentElement){
 
-
-function updateCurrentlyActive(currentElement){
-  console.log('updateCurrentlyActive(currentElement)');
-  console.log(currentElement);
   jQuery('.drag-todo').removeClass('active');
   if(!currentElement){
 
-    if(editFormStatus == 'changed'){
+    displayNotice(null,'updateWhatsCurrentlyActive deselecting all');
+
+    if(editFormHasBeenChanged == 'changed'){
+      displayNotice(null,'trying to save changed form before deselecting all');
+
       var checkSaved = saveUpdateFormContents();
-      if(checkSaved){
-        activeTodo = 0;
-        loadEditor(activeTodo);
-      } else {
-        displayError('saveUpdateFormContents() failed');
-        return false;
-      }
+      return checkSaved.then(function(result){
+        console.log('return checkSaved then result:');
+        console.log(result);
+        if (result == false){
+          displayNotice(null,'Failed to save edit update to server');
+        } else {
+          activeTodo = 0;
+          loadEditor(activeTodo);
+        }
+        return result;
+      });
     } else {
       activeTodo = 0;
       loadEditor(activeTodo);
     }
 
-  } else { 
 
-    if(editFormStatus == 'changed'){
+  } else {
+
+    if(editFormHasBeenChanged == 'changed'){
+
       var checkSaved = saveUpdateFormContents();
-      if(checkSaved){
-        activeTodo = currentElement.id;
-        currentElement.className += " active";
-        loadEditor(activeTodo);
-      } else {
-        displayError('saveUpdateFormContents() failed');
-        return false;
-      }
+      return checkSaved.then(function(result){
+        console.log('return checkSaved then result:');
+        console.log(result);
+
+        if (result == false){
+          displayNotice(null,'Failed to save edit update to server');
+          return false;
+        } else {
+          activeTodo = currentElement.id;
+          currentElement.className += " active";
+          loadEditor(activeTodo);
+          return true;
+        }
+        return result;
+      });
+
     } else {
       activeTodo = currentElement.id;
       currentElement.className += " active";
       loadEditor(activeTodo);
     }
-  }
-  console.log('active-todo:'+activeTodo);
 
+  }
 }
+
+
 
 function loadEditor(id){
   console.log('loadEditor('+id+')');
   if (!id){
+    console.log('id is empty or false');
     document.getElementById("todo-edit").reset();
+
   } else {
+    console.log('id has post');
     var todoTitle = jQuery('#'+id+' .todo-title').html();
     var todoLabel = jQuery('#'+id+' .pm-todo-label').data('label');
     var todoPostid = jQuery('#'+id).data('postid');
@@ -388,18 +428,196 @@ function loadEditor(id){
     jQuery('select#todo-label').val(todoLabel);
     jQuery('#post_id').val(todoPostid);
     jQuery('#matrix-tabs a:last').tab('show');
+    unlockEditForm();
+    watchForEditFormUpdates();
+  }
+}
+
+function ajaxUpdateFilters(){
+  console.log('ajaxUpdateFilters()');
+  if(!userId){
+    console.log('Not saving. User not logged-in');
+    return false;
+  }
+
+  var postId = 'drag-'+jQuery('#post_id').val();
+  var pmTitle = jQuery('#edit-todo-title').val();
+  var pmFilter = jQuery('select#todo-label').val();
+
+  var npmFilterOneLabel = $jQuery('#filter-one').data('color');
+  var npmFilterOneColor = $jQuery('#filter-one-label').data('label');
+  var npmFilterTwoLabel = $jQuery('#filter-two').data('color');
+  var npmFilterTwoColor = $jQuery('#filter-two-label').data('label');
+  var npmFilterThreeLabel = $jQuery('#filter-three').data('color');
+  var npmFilterThreeColor = $jQuery('#filter-one-three').data('label');
+
+  console.log('postId:'+postId);
+  console.log('wpPostId:'+wpPostId);
+
+  console.log('starting ajax content update');
+  var ajax_data = {
+    action: 'pm_update_filters',
+    npm_filter_one_label : npmFilterOneLabel,
+    npm_filter_one_color : npmFilterOneColor,
+    npm_filter_two_label : npmFilterTwoLabel,
+    npm_filter_one_color : npmFilterOneColor,
+    npm_filter_two_label : npmFilterTwoLabel,
+    npm_filter_one_color : npmFilterOneColor,
+    npm_active_filter : npmActiveFilter,
+  }
+
+  jQuery.post( ajax_url, ajax_data, function(data){
+    var reply = jQuery( data ).find('data').text();
+    var status = jQuery( data ).find('status').text();
+    console.log('All:');
+    console.log(data);
+
+    if(status){
+      console.log('ajaxUpdateFilter Content updated!');
+      updateFiltersStatus = false;
+      return true;
+    } else {
+      updateFiltersStatus = true;
+      displayNotice(null,'server ajaxUpdateFilters() returned false');
+      return false;
+    }
+  });
+}
+
+jQuery('.matrix-filter').click(function(e){
+  var filterOn = jQuery(this).data('filter');
+  jQuery('.matrix-filter').removeClass('active');
+  jQuery(this).addClass('active');
+  console.log(filterOn);
+  filterTodos(filterOn);
+})
+
+function filterTodos(targetFilter){
+  var startTime = new Date().getTime();
+  console.log('trying filter:'+targetFilter);
+  if(targetFilter == 'filter-none'){
+    jQuery('.drag-todo').removeClass('hidden');
+  } else {
+    jQuery('.drag-todo').addClass('hidden');
+    jQuery('.'+targetFilter).removeClass('hidden');
+  }
+  var endTime = new Date().getTime() - startTime;
+  console.log('Time to filter:'+endTime);
+}
+
+function clearFormNew(){
+  jQuery('#todo-new')[0].reset();
+}
+function clearFormEdit(){
+  jQuery('#todo-edit')[0].reset();
+
+}
+function unlockEditForm(){
+  var form = document.getElementById('todo-edit');
+  var elements = form.elements;
+  for (var i = 0, len = elements.length; i < len; ++i) {
+    jQuery(elements[i]).attr('disabled',false);
+  }
+}
+function lockEditForm(){
+  var form = document.getElementById('todo-edit');
+  var elements = form.elements;
+  for (var i = 0, len = elements.length; i < len; ++i) {
+    jQuery(elements[i]).attr('disabled',true);
+  }
+}
+function unlockNewForm(){
+  var form = document.getElementById('todo-new');
+  var elements = form.elements;
+  for (var i = 0, len = elements.length; i < len; ++i) {
+    jQuery(elements[i]).attr('disabled',false);
+  }
+}
+function lockNewForm(){
+  var form = document.getElementById('todo-new');
+  var elements = form.elements;
+  for (var i = 0, len = elements.length; i < len; ++i) {
+    jQuery(elements[i]).attr('disabled',true);
+  }
+}
+
+function displayNotice(msg,debug){
+  if(msg){
+    console.log('msg'+msg);
+    jQuery('#pm-error-notice').finish();
+    jQuery('#pm-error-notice')
+    .text(msg)
+    .slideDown("slow")
+    .delay(3000)
+    .slideUp('slow');
+  } else {
+  }
+  if(debug){
+    console.log('displayNotice:'+debug);
   }
 }
 
 
-function displayError(msg){
-  console.log('displayError:'+msg);
-  //jQuery('#errorconsole').html(msg);
-  //jQuery('#errorconsole').fadeIn(100).fadeOut(1000);
+function setResizeListeners(){
+  var resizeTimer;
+  jQuery(window).on('resize', function(e) {
+    clearTimeout(resizeTimer);
+    containerSetup();
+    resizeTimer = setTimeout(function() {
+      repositionAllFromSavedPercentage();
+    }, 250);
+  });
 }
 
 
+function repositionAllFromSavedPercentage(){
+  console.log('repositionAllFromSavedPercentage()');
+  var gridH = jQuery('#matrix-container').height();
+  var gridW = jQuery('#matrix-container').width();
+  var todo = '';
+  var todo = jQuery('.drag-todo');
+  var xpos = '';
+  var ypos = '';
+  jQuery('.drag-todo').each(function(event){
+   var item = document.getElementById(jQuery(this).attr('id'));
+   var xpos = item.dataset.xpos;
+   var ypos = item.dataset.ypos;
+   if (!xpos){
+    var xTrans = 0.1;
+  } else {
+    var xTrans = (gridW * xpos) / 100;
+  }
+  if (!ypos){
+    var yTrans = 0.1;
+  } else {
+    var yTrans = (gridH * ypos) / 100;
+  }
+  item.setAttribute('data-x', xTrans);
+  item.setAttribute('data-y', yTrans);      
+  item.style.webkitTransform = 'translate(' + xTrans + 'px, ' + yTrans + 'px)';
+  item.style.transform = 'translate(' + xTrans + 'px, ' + yTrans + 'px)';
 });
+}
 
+
+function watchForEditFormUpdates(){
+ editFormHasBeenChanged = false;
+ jQuery('.todo-edit-input').each(function() {
+   var elem = jQuery(this);
+   elem.data('oldVal', elem.val());
+   elem.bind("propertychange change click keyup input paste", function(event){
+    if (elem.data('oldVal') != elem.val()) {
+     elem.data('oldVal', elem.val());
+     editFormHasBeenChanged = 'changed';
+   }
+ });
+ });
+}
+
+
+
+
+}
+});
 
 
