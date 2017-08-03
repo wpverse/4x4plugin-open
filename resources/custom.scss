@@ -179,7 +179,7 @@
 
 
 
-		.dropzone{
+		.dropzone.grid-quad{
 			padding:10px;
 		}
 
@@ -205,18 +205,17 @@
 		border:1px solid #BBBBBB;
 		border-radius:5px;
 		box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
-		padding:2px;
-		overflow:hidden;
+		padding:5px;
 		z-index:10px;
 		.inner-border{
 			display:block;
 			position:relative;
-
 			border-radius:5px;
-			padding:2px;
+			padding:0;
 			width:100%;
 			height:100%;
 			pointer-events:none;
+			overflow:hidden;
 		}
 		.todo-title{
 			display:block;
@@ -224,6 +223,7 @@
 			font-size:14px;
 			color:#4A4A4A;
 			pointer-events:none;
+			overflow:hidden;
 		}
 		.todo-content{
 			display:block;
@@ -289,6 +289,48 @@
 			&.filter-three{
 				background-color:#00E40E;
 			}
+		}
+
+
+		.remove-todo-open{
+			display:block;
+			position:absolute;
+			bottom:-5px;
+			right:-5px;
+			border:1px solid #555555;
+			border-radius:50%;
+			font-size:15px;
+			width:20px;
+			line-height:17.5px;
+			height:20px;
+			z-index:6;
+			padding-bottom:2px;
+			text-align:center;
+			background-color:#FFFFFF;
+			cursor:pointer;
+			pointer-events: none;
+			.remove{
+				display:none;
+				position:absolute;
+				top:-10px;
+				left:-40px;
+				width:80px;
+				height:36px;
+				text-align:center;
+				font-size:15px;
+				line-height:30px;
+				border:1px solid #555555;
+				border-radius:5px;
+				background-color:#FFFFFF;
+				cursor:pointer;
+				pointer-events: auto;
+			}
+			.remove.removal{
+				display:block;
+			}
+		}
+		&.active .remove-todo-open{
+			pointer-events: auto;
 		}
 	}
 	#todo-set{

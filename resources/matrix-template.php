@@ -129,6 +129,7 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 							</div>
 							<div class="update-border"></div>
 							<div class="status-border"></div>
+							<div class="remove-todo-open">X<div class="remove">Remove?</div></div>
 						</div>
 					<?php endwhile;
 				} ?>
@@ -139,7 +140,7 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 
 
 		<script>
-			var ajax_url = '<?php echo admin_url("admin-ajax.php?action=pm_update_position"); ?>';
+			var ajax_url = '<?php echo admin_url("admin-ajax.php?action="); ?>';
 		</script>
 	</div>
 

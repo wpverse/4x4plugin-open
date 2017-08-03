@@ -127,16 +127,13 @@ function pm_update_todo() {
 	$title = $_REQUEST['title'];
 	$pmFilter = $_REQUEST['pm_filter'];
 	$response = 'failed';
-
 	$logged_in_id = get_current_user_id();
-
 	if ($user_id == $logged_in_id){
 		$post_args = array(
 			'ID' => $post_id,
 			'post_type' => 'todo',
 			'post_title' => $title,
 			);
-
 		$update_post = wp_update_post($post_args);
 		if ($update_post){
 			update_post_meta($post_id,'pm_filter',$pmFilter );
@@ -145,16 +142,10 @@ function pm_update_todo() {
 			write_log('update todo failed');
 			$response = 'UpdateFailed';
 		}
-
-
 	} else {
-
 		$response = 'badId';
-
 	}
-
 	$reply = new WP_Ajax_Response;
-
 	$reply->add( array(
 		'data' => 'recieved',
 		'supplemental' => array(
@@ -162,12 +153,48 @@ function pm_update_todo() {
 			'newId' => $update_post
 			)
 		));
-
 	$reply->send();
-
 	exit();
-
 }
+
+
+
+add_action( 'wp_ajax_pm_set_as_draft', 'pm_set_as_draft' );
+add_action( 'wp_ajax_nopriv_pm_set_as_draft', 'pm_set_as_draft' );
+
+function pm_set_as_draft() {
+	write_log('pm_set_as_draft');
+	$user_id = $_REQUEST['user_id'];
+	$post_id = $_REQUEST['post_id'];
+	$response = 'failed';
+	$logged_in_id = get_current_user_id();
+	if ($user_id == $logged_in_id){
+		$post_args = array(
+			'ID' => $post_id,
+			'post_status' => 'draft',
+			);
+		$update_post = wp_update_post($post_args);
+		if ($update_post){
+			$response = 'setAsDraft';
+		} else {
+			$response = 'failed';
+		}
+
+	} else {
+		$response = 'badId';
+	}
+	$reply = new WP_Ajax_Response;
+	$reply->add( array(
+		'data' => 'recieved',
+		'supplemental' => array(
+			'status' => $response,
+			'newId' => $update_post
+			)
+		));
+	$reply->send();
+	exit();
+}
+
 
 
 add_action( 'wp_ajax_pm_new_todo', 'pm_new_todo' );

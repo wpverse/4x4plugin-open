@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
     var newFormTryAjaxAgain = '';
     var updateFiltersStatus = '';
     var updateFiltersTryAjaxAgain = '';
-
+    var todoElement = '';
     var toDoBacklogArea = document.getElementById('todo-backlog-area');
     var urgentImportant = document.getElementById('urgent-important');
     var notUrgentImportant = document.getElementById('not-urgent-important');
@@ -44,10 +44,7 @@ jQuery(document).ready(function() {
       todoDoneArea.style.height = extraAreasHeight+'px';
     }
 
-
-
     setResizeListeners();
-
 
     repositionAllFromSavedPercentage();
 
@@ -68,12 +65,10 @@ jQuery(document).ready(function() {
          onmove: dragMoveListener,
          onend: function (event) {
            console.log(event.target.dataset.postid);
-           updatePosition(event.target.dataset.postid,event.target.dataset.xpos,event.target.dataset.ypos);
+           ajaxUpdatePosition(event.target.dataset.postid,event.target.dataset.xpos,event.target.dataset.ypos);
          }
        });
       }
-
-
 
     }
 
@@ -105,12 +100,22 @@ jQuery(document).ready(function() {
 
     jQuery('.drag-todo').click(function(){
 
+
       if(userId == false || userId == null){
         displayNotice('You are not Logged-in. Please login to make changes.','User not logged-in');
         return;
       }
+      console.log(this);
+      var setActive = updateWhatsCurrentlyActive(this);
+      console.log(setActive);
 
-      updateWhatsCurrentlyActive(this);
+      /*
+      return setActive.then(function(result){
+        console.log('result of setActive:'+result);
+        return result;
+      });
+      */
+
     });
 
     jQuery('#edit_pm_submit').click(function(e){
@@ -153,6 +158,7 @@ jQuery(document).ready(function() {
     function selectNone(){
       console.log('Click.. :remove ACTIVE');
       jQuery('.drag-todo').removeClass('active');
+      jQuery(".drag-todo .remove").removeClass('removal');
       updateWhatsCurrentlyActive();
       lockEditForm();
     }
@@ -178,8 +184,8 @@ jQuery(document).ready(function() {
 
 
 
-    function updatePosition(postId,xpos,ypos){
-      console.log('updatePosition(postId,xpos,ypos)');
+    function ajaxUpdatePosition(postId,xpos,ypos){
+      console.log('ajaxUpdatePosition(postId,xpos,ypos)');
       var ajax_data = {
         action: 'pm_update_position',
         user_id : userId,
@@ -187,7 +193,8 @@ jQuery(document).ready(function() {
         xpos: xpos,
         ypos: ypos
       }
-      jQuery.post( ajax_url, ajax_data, function(data){
+      var mod_url = ajax_url+'pm_update_position';
+      jQuery.post( mod_url, ajax_data, function(data){
         var reply = jQuery( data ).find('data').text();
         var status = jQuery( data ).find('status').text();
         console.log('reply');
@@ -213,23 +220,25 @@ jQuery(document).ready(function() {
       displayNotice(null,'doing ajax Update Content()');
       
       if(!userId){
-        console.log('Not saving. User not logged-in');
+        displayNotice(null,'Not saving. User not logged-in');
         return false;
       }
-
+      todoElement = document.getElementById(activeTodo);
       var wpPostId = todoElement.dataset.postid;
 
       var postId = 'drag-'+jQuery('#post_id').val();
       var pmTitle = jQuery('#edit-todo-title').val();
       var pmFilter = jQuery('select#todo-label').val();
 
-      jQuery('#'+activeTodo+' .pm-todo-label').removeClass('unlabeled red orange green');
+      jQuery('#'+activeTodo+' .pm-todo-label').removeClass('unlabeled filter-one filter-two filter-three');
       jQuery('#'+activeTodo+' .pm-todo-label').addClass(pmFilter).data('label',pmFilter);
       jQuery('#'+activeTodo).removeClass('unlabeled filter-one filter-two filter-three');
       jQuery('#'+activeTodo).addClass(pmFilter);
       jQuery('#'+activeTodo+' .todo-title').html(pmTitle)
 
       displayNotice(null,'starting ajax content update');
+
+
       var ajax_data = {
         action: 'pm_update_todo',
         post_id : wpPostId,
@@ -238,7 +247,8 @@ jQuery(document).ready(function() {
         pm_filter : pmFilter,
       }
 
-      var savingEdit = jQuery.post( ajax_url, ajax_data, function(data){
+      var mod_url = ajax_url+'pm_update_todo';
+      var savingEdit = jQuery.post( mod_url, ajax_data, function(data){
         var reply = jQuery( data ).find('data').text();
         var status = jQuery( data ).find('status').text();
         console.log('All:');
@@ -262,9 +272,9 @@ jQuery(document).ready(function() {
 
 
     function ajaxNewTodo(){
-      console.log('ajaxNewTodo()');
+      displayNotice(null,'doing ajax New Todo()');
       if(!userId){
-        displayNotice('Not saving. User not logged-in');
+        displayNotice(null,'Not saving. User not logged-in');
         return;
       }
 
@@ -278,7 +288,8 @@ jQuery(document).ready(function() {
         title : pmTitle,
         pm_filter : pmFilter,
       }
-      jQuery.post( ajax_url, ajax_data, function(data){
+      var mod_url = ajax_url+'pm_new_todo';
+      var savingNewTodo = jQuery.post( mod_url, ajax_data, function(data){
         var reply = jQuery( data ).find('data').text();
         var status = jQuery( data ).find('status').text();
         console.log('All:');
@@ -354,7 +365,17 @@ interact('.dropzone').dropzone({
 
 function updateWhatsCurrentlyActive(currentElement){
 
-  jQuery('.drag-todo').removeClass('active');
+
+  if(currentElement){
+    if(currentElement.id !== activeTodo){
+      console.log('++they are not equal++');
+
+    } else {
+      console.log('++they are equal++');
+
+    }
+  }
+
   if(!currentElement){
 
     displayNotice(null,'updateWhatsCurrentlyActive deselecting all');
@@ -375,8 +396,11 @@ function updateWhatsCurrentlyActive(currentElement){
         return result;
       });
     } else {
+
       activeTodo = 0;
+      jQuery('.drag-todo').removeClass('active');
       loadEditor(activeTodo);
+      return 'no need';
     }
 
 
@@ -394,20 +418,36 @@ function updateWhatsCurrentlyActive(currentElement){
           return false;
         } else {
           activeTodo = currentElement.id;
-          currentElement.className += " active";
+          //currentElement.className += " active";
+          jQuery('.drag-todo').removeClass('active');
+          jQuery('#'+activeTodo).addClass('active');
           loadEditor(activeTodo);
+          setupTodoListeners();
           return true;
         }
+
+
         return result;
       });
 
     } else {
-      activeTodo = currentElement.id;
-      currentElement.className += " active";
-      loadEditor(activeTodo);
-    }
 
+      console.log('setting active');
+      activeTodo = currentElement.id;
+      //currentElement.className += " active";
+      jQuery('.remove').removeClass('removal');
+      jQuery('.drag-todo').removeClass('active');
+      jQuery('#'+activeTodo).addClass('active');
+      loadEditor(activeTodo);
+
+      setupTodoListeners();
+      return true;
+
+
+    }
   }
+  return result;
+
 }
 
 
@@ -416,22 +456,35 @@ function loadEditor(id){
   console.log('loadEditor('+id+')');
   if (!id){
     console.log('id is empty or false');
-    document.getElementById("todo-edit").reset();
-
+    clearFormEdit();
   } else {
     console.log('id has post');
-    var todoTitle = jQuery('#'+id+' .todo-title').html();
-    var todoLabel = jQuery('#'+id+' .pm-todo-label').data('label');
-    var todoPostid = jQuery('#'+id).data('postid');
-    console.log(todoTitle);
-    jQuery('#edit-todo-title').val(todoTitle);
-    jQuery('select#todo-label').val(todoLabel);
-    jQuery('#post_id').val(todoPostid);
-    jQuery('#matrix-tabs a:last').tab('show');
-    unlockEditForm();
-    watchForEditFormUpdates();
+    console.log( jQuery('#post_id').val() );
+    console.log( id );
+    var idVal = 'drag-'+jQuery('#post_id').val();
+
+    if( idVal !== id ){
+
+      var todoTitle = jQuery('#'+id+' .todo-title').html();
+      var todoLabel = jQuery('#'+id+' .pm-todo-label').data('label');
+      var todoPostid = jQuery('#'+id).data('postid');
+      console.log(todoTitle);
+      jQuery('#edit-todo-title').val(todoTitle);
+      jQuery('select#todo-label').val(todoLabel);
+      jQuery('#post_id').val(todoPostid);
+      jQuery('#matrix-tabs a:last').tab('show');
+
+      unlockEditForm();
+      watchForEditFormUpdates();
+
+    } else {
+      console.log('already loaded');
+
+    }
+
   }
 }
+
 
 function ajaxUpdateFilters(){
   console.log('ajaxUpdateFilters()');
@@ -455,6 +508,7 @@ function ajaxUpdateFilters(){
   console.log('wpPostId:'+wpPostId);
 
   console.log('starting ajax content update');
+
   var ajax_data = {
     action: 'pm_update_filters',
     npm_filter_one_label : npmFilterOneLabel,
@@ -465,8 +519,8 @@ function ajaxUpdateFilters(){
     npm_filter_one_color : npmFilterOneColor,
     npm_active_filter : npmActiveFilter,
   }
-
-  jQuery.post( ajax_url, ajax_data, function(data){
+  var mod_url = ajax_url+'pm_update_filters';
+  jQuery.post( mod_url, ajax_data, function(data){
     var reply = jQuery( data ).find('data').text();
     var status = jQuery( data ).find('status').text();
     console.log('All:');
@@ -509,7 +563,9 @@ function clearFormNew(){
   jQuery('#todo-new')[0].reset();
 }
 function clearFormEdit(){
+  console.log('clearing form');
   jQuery('#todo-edit')[0].reset();
+  jQuery('#post_id').val('');
 
 }
 function unlockEditForm(){
@@ -614,6 +670,87 @@ function watchForEditFormUpdates(){
  });
 }
 
+function setupTodoListeners(){
+  // unbind
+  console.log('setupTodoListeners');
+
+  jQuery('.remove-todo-open').unbind();
+  jQuery('.remove').unbind();
+  //jQuery('.remove').removeClass('removal');
+
+  jQuery(".drag-todo.active .remove-todo-open").click(function(e){
+    e.stopPropagation();
+    console.log('clicked X set');
+    //alert('clicked A');
+    jQuery(".drag-todo.active .remove").addClass('removal');
+  });
+  jQuery(".drag-todo.active .remove").click(function(e){
+    e.stopPropagation();
+
+    var rTarget = jQuery(this).parent().parent().data('postid');
+    var draft = ajaxSetAsDraft(rTarget);
+    return draft.then(function(result){
+      console.log('test result '+result+': '+result);
+      rTargetId = '#'+activeTodo;
+      console.log('activeTodo: '+rTargetId);
+      jQuery(rTargetId).remove();
+      return result;
+    });
+
+
+    
+    console.log(this);
+    console.log('clicked R set');
+    var setDraft = ajaxSetAsDraft();
+    alert('clicked B');
+
+
+  });
+}
+
+
+function ajaxSetAsDraft(draftId){
+  console.log('ajaxSendToDraft()');
+  if(!userId){
+    console.log('Not saving. User not logged-in');
+    return false;
+  }
+  if(draftId !== activeTodo){
+    console.log('draftId'+draftId);
+    console.log('activeTodo'+activeTodo);
+  }
+
+  todoElement = document.getElementById(activeTodo);
+  var wpPostId = todoElement.dataset.postid;
+
+  var ajax_data = {
+    action: 'pm_set_as_draft',
+    post_id : wpPostId,
+    user_id : userId
+  }
+  var mod_url = ajax_url+'pm_set_as_draft';
+  var setDraft = jQuery.post( mod_url, ajax_data, function(data){
+    var reply = jQuery( data ).find('data').text();
+    var status = jQuery( data ).find('status').text();
+    console.log('All:');
+    console.log(data);
+
+    if(status == 'setAsDraft'){
+      console.log('ajaxSetAsDraft set to draft!');
+      updateFiltersStatus = false;
+      return status;
+    } else {
+      updateFiltersStatus = true;
+      displayNotice(null,'server ajaxSetAsDraft() returned false');
+      return false;
+    }
+
+  });
+  return setDraft.then(function(result){
+    var status = jQuery( result ).find('status').text();
+    return status;
+  });
+}
 
 
 
