@@ -89,13 +89,13 @@
     color: #4A4A4A;
     text-align: center; }
   #npm_plugin_wrap.npm_content_container #matrix-container .pm-gridlabel-do-state {
-    top: 0;
+    top: 3px;
     left: 50%;
     -webkit-transform: translateX(-50%);
             transform: translateX(-50%); }
   #npm_plugin_wrap.npm_content_container #matrix-container .pm-gridlabel-vertical {
     top: 50%;
-    left: 0;
+    left: 3px;
     -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%); }
   #npm_plugin_wrap.npm_content_container #matrix-container .pm-rotate {
@@ -130,10 +130,10 @@
     transition: all 1s;
     background-color: #D8D8D8; }
   #npm_plugin_wrap.npm_content_container #matrix-container .drop-active .zone-status {
-    border: 5px dashed #C0C0C0;
+    border: 1px dashed #C0C0C0;
     transition: all 0.1s; }
   #npm_plugin_wrap.npm_content_container #matrix-container .drop-target .zone-status {
-    border: 5px dashed #404040;
+    border: 1px dashed #404040;
     transition: all 1s; }
 
 #npm_plugin_wrap.npm_content_container .drag-todo {
