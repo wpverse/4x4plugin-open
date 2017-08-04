@@ -45,27 +45,42 @@
         display: inline-block;
         margin: 0 auto; }
   #npm_plugin_wrap.npm_content_container #controls-wrap #edit-todo-title,
-  #npm_plugin_wrap.npm_content_container #controls-wrap #new-todo-title {
-    min-width: 350px; }
+  #npm_plugin_wrap.npm_content_container #controls-wrap input#new-todo-title {
+    min-width: 350px;
+    margin: 0; }
+  #npm_plugin_wrap.npm_content_container #controls-wrap input.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }
 
 #npm_plugin_wrap.npm_content_container #matrix-container {
   display: block;
   position: relative;
   width: 100%;
   height: auto;
-  border: 1px solid grey;
-  border-radius: 10px;
+  border: 1px solid #979797;
+  border-radius: 0;
   padding: 2%; }
   #npm_plugin_wrap.npm_content_container #matrix-container .grid-quad {
     display: block;
     position: relative;
     width: 50%;
     height: 35vw;
-    border: 1px solid grey;
-    border-radius: 10px;
+    border: none;
+    border-radius: 0;
     float: left;
-    padding: 0;
-    background-color: #D8D8D8; }
+    padding: 2px;
+    background-color: #FFFFFF; }
   #npm_plugin_wrap.npm_content_container #matrix-container .quad-label {
     display: block;
     position: absolute;
@@ -94,30 +109,32 @@
   #npm_plugin_wrap.npm_content_container #matrix-container .done-area, #npm_plugin_wrap.npm_content_container #matrix-container .backlog-area {
     display: block;
     position: relative;
-    padding: 0;
-    border: 1px solid #CCCCCC;
+    padding: 2px;
+    border: none;
     border-radius: 5px;
-    background-color: #EEEEEE;
+    background-color: #FFFFFF;
     height: 20vw;
     width: 100%;
     margin: 0;
     float: left; }
+    #npm_plugin_wrap.npm_content_container #matrix-container .done-area .zone-status, #npm_plugin_wrap.npm_content_container #matrix-container .backlog-area .zone-status {
+      border: 1px solid #CCCCCC;
+      background-color: #EEEEEE; }
   #npm_plugin_wrap.npm_content_container #matrix-container .zone-status {
     display: block;
     position: relative;
     width: 100%;
     height: 100%;
-    border: 5px dashed #D8D8D8;
-    border-radius: 20px;
-    transition: all 1s; }
+    border: 1px solid grey;
+    border-radius: 0;
+    transition: all 1s;
+    background-color: #D8D8D8; }
   #npm_plugin_wrap.npm_content_container #matrix-container .drop-active .zone-status {
     border: 5px dashed #C0C0C0;
     transition: all 0.1s; }
   #npm_plugin_wrap.npm_content_container #matrix-container .drop-target .zone-status {
     border: 5px dashed #404040;
     transition: all 1s; }
-  #npm_plugin_wrap.npm_content_container #matrix-container .dropzone.grid-quad {
-    padding: 10px; }
 
 #npm_plugin_wrap.npm_content_container .drag-todo {
   display: block;
@@ -125,17 +142,16 @@
   top: 0;
   left: 0;
   width: 85px;
-  height: 150px;
+  height: 161px;
   background-color: #FFFFFF;
-  border: 1px solid #BBBBBB;
-  border-radius: 5px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid #979797;
+  border-radius: 0;
   padding: 5px;
   z-index: 10px; }
   #npm_plugin_wrap.npm_content_container .drag-todo .inner-border {
     display: block;
     position: relative;
-    border-radius: 5px;
+    border-radius: 0;
     padding: 0;
     width: 100%;
     height: 100%;
@@ -147,7 +163,8 @@
     font-size: 14px;
     color: #4A4A4A;
     pointer-events: none;
-    overflow: hidden; }
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif; }
   #npm_plugin_wrap.npm_content_container .drag-todo .todo-content {
     display: block;
     position: relative;
@@ -157,7 +174,7 @@
     display: none;
     position: absolute;
     border: 1px solid #0000BB;
-    border-radius: 5px;
+    border-radius: 0;
     padding: 2px;
     top: 0;
     left: 0;
@@ -168,7 +185,7 @@
     display: none;
     position: absolute;
     border: 2px solid #00CC00;
-    border-radius: 5px;
+    border-radius: 0;
     padding: 2px;
     top: 0;
     left: 0;
@@ -177,11 +194,11 @@
     pointer-events: none; }
   #npm_plugin_wrap.npm_content_container .drag-todo.active {
     z-index: 20;
-    box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.3); }
+    box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.1); }
     #npm_plugin_wrap.npm_content_container .drag-todo.active .status-border {
       display: block;
       position: absolute;
-      border: 1px solid #0000BB;
+      border: 1px solid #8e8ecb;
       pointer-events: none; }
   #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label {
     display: block;
@@ -190,12 +207,13 @@
     left: 0;
     width: 100%;
     height: 10px;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0;
     background-color: #FFFFFF;
     pointer-events: none;
-    z-index: 5; }
+    border-top: 1px solid #979797; }
     #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.unlabeled {
-      background-color: #FFFFFF; }
+      background-color: #FFFFFF;
+      border-top: none; }
     #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.filter-one {
       background-color: #FF0000; }
     #npm_plugin_wrap.npm_content_container .drag-todo .pm-todo-label.filter-two {
@@ -207,9 +225,10 @@
     position: absolute;
     bottom: -5px;
     right: -5px;
-    border: 1px solid #555555;
+    border: 1px solid #818181;
     border-radius: 50%;
     font-size: 15px;
+    color: #818181;
     width: 20px;
     line-height: 17.5px;
     height: 20px;
@@ -222,6 +241,7 @@
     #npm_plugin_wrap.npm_content_container .drag-todo .remove-todo-open .remove {
       display: none;
       position: absolute;
+      color: #818181;
       top: -10px;
       left: -40px;
       width: 80px;
@@ -229,7 +249,7 @@
       text-align: center;
       font-size: 15px;
       line-height: 30px;
-      border: 1px solid #555555;
+      border: 1px solid #818181;
       border-radius: 5px;
       background-color: #FFFFFF;
       cursor: pointer;

@@ -40,6 +40,7 @@ function ncpm_scripts() {
 	wp_register_style( 'ncpm.css', plugin_dir_url( __FILE__ ) . 'resources/custom.css', array() );
 	wp_enqueue_style( 'ncpm.css');
 
+	wp_enqueue_style( 'google-fonts-npm','https://fonts.googleapis.com/css?family=Roboto:300',array() );
 
 	wp_enqueue_style( 'bootstrap-css','https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',array(),'3.3.7' );
 
