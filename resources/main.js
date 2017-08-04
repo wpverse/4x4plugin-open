@@ -143,17 +143,17 @@ jQuery(document).ready(function() {
       }
 
       console.log('trying ajaxNewTodo()');
-      var newTodoError = ajaxNewTodo();
-      if (!newTodoError){
-       updateFiltersTryAjaxAgain++;
-       console.log(updateFiltersTryAjaxAgain);
-     } else {
-      selectNone();
-      clearFormNew();      
-    }
+      var newTodoResult = ajaxNewTodo();
+      newTodoResult.then(function(result){
+        console.log('newTodoResult');
+        console.log(newTodoResult);
+        selectNone();
+        clearFormNew(); 
+      });
 
 
-  });
+
+    });
 
     function selectNone(){
       console.log('Click.. :remove ACTIVE');
@@ -315,6 +315,11 @@ jQuery(document).ready(function() {
          return false;
        }
      });
+      return savingNewTodo.then(function(result){
+        console.log('level 1 ajaxNewTodo result:');
+        console.log(result);
+        return result;
+      });
 
     }
 
