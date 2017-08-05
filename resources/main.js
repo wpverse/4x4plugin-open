@@ -306,7 +306,7 @@ jQuery(document).ready(function() {
          var gridW = jQuery('#matrix-container').width();
          var gridCenterX = gridW / 2;
          var gridCenterY = gridH / 2;
-         var newPost = '<div id="drag-'+status+'" class="draggable drag-todo js-drag pm-activity dropzone yes-drop" data-postid="'+status+'" data-xpos="50" data-ypos="50" data-x="' + gridCenterX + '" data-y="' + gridCenterY + '" style="transform: translate(' + gridCenterX + 'px, ' + gridCenterY + 'px);"><div class="pm-todo-label ' + pmFilter + '" data-label="' + pmFilter + '"></div><div class="inner-border"><div class="todo-title">'+pmTitle+'</div></div></div><div class="update-border"><div class="status-border"></div></div>';
+         var newPost = '<div id="drag-'+status+'" class="draggable drag-todo js-drag pm-activity dropzone yes-drop" data-postid="'+status+'" data-xpos="50" data-ypos="50" data-x="' + gridCenterX + '" data-y="' + gridCenterY + '" style="transform: translate(' + gridCenterX + 'px, ' + gridCenterY + 'px);"><div class="pm-todo-label ' + pmFilter + '" data-label="' + pmFilter + '"></div><div class="inner-border"><div class="todo-title">'+pmTitle+'</div></div><div class="update-border"></div><div class="status-border"></div><div class="remove-todo-open">X<div class="remove">Remove?</div></div></div>';
          jQuery('#todo-set').append(newPost);
          newFormStatus = false;
          return status;
@@ -699,6 +699,8 @@ function setupTodoListeners(){
       rTargetId = '#'+activeTodo;
       console.log('activeTodo: '+rTargetId);
       jQuery(rTargetId).remove();
+      updateWhatsCurrentlyActive();
+      lockEditForm();
       return result;
     });
 
