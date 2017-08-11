@@ -36,10 +36,9 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 				</ul>
 				<div id="date-filter" class="">
 					<div id="filter-none" class="matrix-date-filter active" data-age="" data-filter="filter-none"><div id="filter-label-none" class="matrix-date-label" data-label="">None</div></div>
-					<div id="filter-recent" class="matrix-date-filter" data-age="" data-filter="age-recent"><div id="filter-label-recent" class="matrix-date-label" data-label="">Recent</div></div>
-					<div id="filter-week" class="matrix-date-filter" data-age="" data-filter="age-week"><div id="filter-label-week" class="matrix-date-label" data-label="">1-2 Weeks</div></div>
-					<div id="filter-weeks" class="matrix-date-filter" data-age="" data-filter="age-weeks"><div id="filter-label-weeks" class="matrix-date-label" data-label="">2 Weeks - 1 Month</div></div>
-					<div id="filter-month" class="matrix-date-filter" data-age="" data-filter="age-month"><div id="filter-label-month" class="matrix-date-label" data-label="">Over 1 month</div></div>
+					<div id="filter-recent" class="matrix-date-filter" data-age="" data-filter="age-recent"><div id="filter-label-recent" class="matrix-date-label" data-label="">0-3 Days</div></div>
+					<div id="filter-short" class="matrix-date-filter" data-age="" data-filter="age-short"><div id="filter-label-short" class="matrix-date-label" data-label="">4-7 Days</div></div>
+					<div id="filter-medium" class="matrix-date-filter" data-age="" data-filter="age-medium"><div id="filter-label-medium" class="matrix-date-label" data-label="">8 Days and older</div></div>
 				</div>
 				<div id="npm-filter" class="">
 					<div id="filter-none" class="matrix-filter active" data-color="" data-filter="filter-none"><div id="filter-one-label" class="matrix-filter-label" data-label="">None</div></div>
@@ -127,14 +126,12 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 						$interval = $days->format('%d');
 						write_log('$interval');
 						write_log($interval);
-						if ($interval <= 7){
+						if ($interval <= 3){
 							$age_class = 'age-recent';
-						} elseif($interval <= 14){
-							$age_class = 'age-week';
-						} elseif($interval <= 30){
-							$age_class = 'age-weeks';
+						} elseif($interval <= 7){
+							$age_class = 'age-short';
 						} else {
-							$age_class = 'age-month';
+							$age_class = 'age-medium';
 						}
 
 						write_log($age_class);

@@ -366,10 +366,10 @@
         text-shadow: 0 0 6px #000000; }
   #npm_plugin_wrap.npm_content_container #date-filter #filter-label-recent {
     background-color: #01DDFB; }
-  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-week {
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-short {
     background-color: #07A3DB; }
-  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-weeks {
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-medium {
     background-color: #0578A7; }
-  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-month {
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-long {
     background-color: #01415F; }
 /*# sourceMappingURL=custom.css.map */
