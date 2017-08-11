@@ -310,7 +310,7 @@
   right: 15px;
   bottom: 0;
   border: 1px solid black;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px; }
   #npm_plugin_wrap.npm_content_container #npm-filter .matrix-filter {
     display: block;
@@ -325,6 +325,7 @@
       position: relative;
       color: #FFFFFF;
       font-size: 12px;
+      line-height: 16px;
       text-shadow: 0 0 3px #000000; }
       #npm_plugin_wrap.npm_content_container #npm-filter .matrix-filter .matrix-filter-label:hover {
         text-shadow: 0 0 6px #000000; }
@@ -334,4 +335,41 @@
     background-color: #F5A623; }
   #npm_plugin_wrap.npm_content_container #npm-filter #filter-three {
     background-color: #7ED321; }
+
+#npm_plugin_wrap.npm_content_container #date-filter {
+  display: inline-block;
+  position: absolute;
+  right: 108px;
+  bottom: 0;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px; }
+  #npm_plugin_wrap.npm_content_container #date-filter .matrix-date-filter {
+    display: block;
+    position: relative;
+    padding: 0;
+    border: 1px solid transparent;
+    cursor: pointer; }
+    #npm_plugin_wrap.npm_content_container #date-filter .matrix-date-filter.active {
+      border: 1px solid black; }
+    #npm_plugin_wrap.npm_content_container #date-filter .matrix-date-filter .matrix-date-label {
+      display: block;
+      position: relative;
+      color: #FFFFFF;
+      font-size: 12px;
+      line-height: 15.6px;
+      height: 15.6px;
+      padding: 0 3px;
+      text-align: center;
+      text-shadow: 0 0 3px #000000; }
+      #npm_plugin_wrap.npm_content_container #date-filter .matrix-date-filter .matrix-date-label:hover {
+        text-shadow: 0 0 6px #000000; }
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-recent {
+    background-color: #01DDFB; }
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-week {
+    background-color: #07A3DB; }
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-weeks {
+    background-color: #0578A7; }
+  #npm_plugin_wrap.npm_content_container #date-filter #filter-label-month {
+    background-color: #01415F; }
 /*# sourceMappingURL=custom.css.map */

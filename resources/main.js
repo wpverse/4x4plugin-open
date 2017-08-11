@@ -17,6 +17,8 @@ jQuery(document).ready(function() {
     var urgentNotImportant = document.getElementById('urgent-not-important');
     var notUrgentNotImportant = document.getElementById('not-urgent-not-important');
     var todoDoneArea = document.getElementById('todo-done-area');
+    var labelFilter = '';
+    var dateFilter = '';
 
 
     userId = jQuery('#matrix-container').data('userid');
@@ -556,13 +558,44 @@ function filterTodos(targetFilter){
   console.log('trying filter:'+targetFilter);
   if(targetFilter == 'filter-none'){
     jQuery('.drag-todo').removeClass('hidden');
+    labelFilter = '';
   } else {
     jQuery('.drag-todo').addClass('hidden');
     jQuery('.'+targetFilter).removeClass('hidden');
+    labelFilter = targetFilter;
   }
   var endTime = new Date().getTime() - startTime;
   console.log('Time to filter:'+endTime);
 }
+
+
+jQuery('.matrix-date-filter').click(function(e){
+  var filterTime = jQuery(this).data('filter');
+  jQuery('.matrix-date-filter').removeClass('active');
+  jQuery(this).addClass('active');
+  console.log(filterTime);
+  filterDates(filterTime);
+});
+
+function filterDates(targetFilter){
+  var startTime = new Date().getTime();
+  console.log('trying filter:'+targetFilter);
+  if(targetFilter == 'filter-none'){
+    jQuery('.drag-todo').removeClass('hidden');
+    dateFilter = '';
+  } else {
+    jQuery('.drag-todo').addClass('hidden');
+    jQuery('.'+targetFilter).removeClass('hidden');
+    dateFilter = targetFilter;
+  }
+
+  var endTime = new Date().getTime() - startTime;
+  console.log('Time to filter:'+endTime);
+}
+
+
+
+
 
 function clearFormNew(){
   jQuery('#todo-new')[0].reset();

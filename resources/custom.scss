@@ -419,7 +419,7 @@
 		right:15px;
 		bottom:0;
 		border:1px solid black;
-		padding:10px;
+		padding:5px;
 		border-radius:5px;
 		.matrix-filter{
 			display:block;
@@ -436,6 +436,7 @@
 				position:relative;
 				color:#FFFFFF;
 				font-size:12px;
+				line-height:16px;
 				text-shadow: 0 0 3px #000000;
 				&:hover{
 					text-shadow: 0 0 6px #000000;
@@ -450,6 +451,52 @@
 		}
 		#filter-three{
 			background-color:#7ED321;
+		}
+	}
+	#date-filter{
+		display:inline-block;
+		position:absolute;
+		right:108px;
+		bottom:0;
+		border:1px solid black;
+		padding:5px;
+		border-radius:5px;
+		.matrix-date-filter{
+			display:block;
+			position:relative;
+			padding:0;
+			border:1px solid transparent;
+			cursor:pointer;
+
+			&.active{
+				border:1px solid black;
+			}
+			.matrix-date-label{
+				display:block;
+				position:relative;
+				color:#FFFFFF;
+				font-size:12px;
+				line-height:15.6px;
+				height:15.6px;
+				padding:0 3px;
+				text-align:center;
+				text-shadow: 0 0 3px #000000;
+				&:hover{
+					text-shadow: 0 0 6px #000000;
+				}
+			}
+		}
+		#filter-label-recent{
+			background-color:#01DDFB;
+		}
+		#filter-label-week{
+			background-color:#07A3DB;
+		}
+		#filter-label-weeks{
+			background-color:#0578A7;
+		}
+		#filter-label-month{
+			background-color:#01415F;
 		}
 	}
 	#main *{

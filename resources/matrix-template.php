@@ -34,6 +34,13 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 					<li role="presentation" class="active"><a class="tab-control" href="#pm-form-new-todo-panel" aria-controls="new todo" role="tab" data-toggle="tab">New Todo</a></li>
 					<li role="presentation"><a class="tab-control" href="#pm-form-edit-todo-panel" aria-controls="edit todo" role="tab" data-toggle="tab">Edit Todo</a></li>
 				</ul>
+				<div id="date-filter" class="">
+					<div id="filter-none" class="matrix-date-filter active" data-age="" data-filter="filter-none"><div id="filter-label-none" class="matrix-date-label" data-label="">None</div></div>
+					<div id="filter-recent" class="matrix-date-filter" data-age="" data-filter="age-recent"><div id="filter-label-recent" class="matrix-date-label" data-label="">Recent</div></div>
+					<div id="filter-week" class="matrix-date-filter" data-age="" data-filter="age-week"><div id="filter-label-week" class="matrix-date-label" data-label="">1-2 Weeks</div></div>
+					<div id="filter-weeks" class="matrix-date-filter" data-age="" data-filter="age-weeks"><div id="filter-label-weeks" class="matrix-date-label" data-label="">2 Weeks - 1 Month</div></div>
+					<div id="filter-month" class="matrix-date-filter" data-age="" data-filter="age-month"><div id="filter-label-month" class="matrix-date-label" data-label="">Over 1 month</div></div>
+				</div>
 				<div id="npm-filter" class="">
 					<div id="filter-none" class="matrix-filter active" data-color="" data-filter="filter-none"><div id="filter-one-label" class="matrix-filter-label" data-label="">None</div></div>
 					<div id="filter-one" class="matrix-filter" data-color="" data-filter="filter-one"><div id="filter-one-label" class="matrix-filter-label" data-label="">One</div></div>
@@ -109,10 +116,32 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 						$y_pos = get_post_meta($post->ID,'y_pos',true);
 						$pm_filter = get_post_meta($post->ID,'pm_filter',true);
 						$pm_quadrant = get_post_meta($post->ID,'pm_quadrant',true);
+
+						$now = new DateTime();
+						$post_date = new DateTime($post->post_date);
+						//write_log($now);
+						//write_log($post_date);
+						$days = date_diff($post_date, $now);
+						//write_log('$days');
+						//write_log($days);
+						$interval = $days->format('%d');
+						write_log('$interval');
+						write_log($interval);
+						if ($interval <= 7){
+							$age_class = 'age-recent';
+						} elseif($interval <= 14){
+							$age_class = 'age-week';
+						} elseif($interval <= 30){
+							$age_class = 'age-weeks';
+						} else {
+							$age_class = 'age-month';
+						}
+
+						write_log($age_class);
+
 						if( !$x_pos ){
 							$x_pos = 0.1;
 						}
-
 						if( !$y_pos ){
 							$y_pos = 0.1;
 						}
@@ -121,7 +150,7 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 						}
 						?>
 
-						<div id="drag-<?php echo $post->ID; ?>" class="draggable drag-todo js-drag pm-activity dropzone yes-drop <?php echo $pm_filter; ?>" data-postid="<?php echo $post->ID; ?>" data-xpos="<?php echo $x_pos; ?>" data-ypos="<?php echo $y_pos; ?>" data-x="" data-y="" style="transform: translate(0px, 0px);">
+						<div id="drag-<?php echo $post->ID; ?>" class="draggable drag-todo js-drag pm-activity dropzone yes-drop <?php echo $pm_filter.' '.$age_class; ?>" data-postid="<?php echo $post->ID; ?>" data-xpos="<?php echo $x_pos; ?>" data-ypos="<?php echo $y_pos; ?>" data-x="" data-y="" style="transform: translate(0px, 0px);">
 							<div class="pm-todo-label <?php echo $pm_filter; ?>" data-label="<?php echo $pm_filter; ?>"><?php //echo $pm_label; ?></div>
 							<div class="inner-border">
 								<div class="todo-title"><?php the_title(); ?></div>
