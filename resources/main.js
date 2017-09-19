@@ -306,9 +306,9 @@ jQuery(document).ready(function() {
          var pmFilter = jQuery('select#new-todo-label').val();
          var gridH = jQuery('#matrix-container').height();
          var gridW = jQuery('#matrix-container').width();
-         var gridCenterX = gridW / 2;
-         var gridCenterY = gridH / 2;
-         var newPost = '<div id="drag-'+status+'" class="draggable drag-todo js-drag pm-activity dropzone yes-drop" data-postid="'+status+'" data-xpos="50" data-ypos="50" data-x="' + gridCenterX + '" data-y="' + gridCenterY + '" style="transform: translate(' + gridCenterX + 'px, ' + gridCenterY + 'px);"><div class="pm-todo-label ' + pmFilter + '" data-label="' + pmFilter + '"></div><div class="inner-border"><div class="todo-title">'+pmTitle+'</div></div><div class="update-border"></div><div class="status-border"></div><div class="remove-todo-open">X<div class="remove">Remove?</div></div></div>';
+         var gridCenterX = gridW / 20;
+         var gridCenterY = gridH / 23;
+         var newPost = '<div id="drag-'+status+'" class="draggable drag-todo js-drag pm-activity dropzone yes-drop" data-postid="'+status+'" data-xpos="05" data-ypos="05" data-x="' + gridCenterX + '" data-y="' + gridCenterY + '" style="transform: translate(' + gridCenterX + 'px, ' + gridCenterY + 'px);"><div class="pm-todo-label ' + pmFilter + '" data-label="' + pmFilter + '"></div><div class="inner-border"><div class="todo-title">'+pmTitle+'</div></div><div class="update-border"></div><div class="status-border"></div><div class="remove-todo-open">X<div class="remove">Remove?</div></div></div>';
          jQuery('#todo-set').append(newPost);
          newFormStatus = false;
          return status;

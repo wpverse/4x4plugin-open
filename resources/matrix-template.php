@@ -24,7 +24,7 @@ $npm_filter_three_color = get_option( 'npm_filter_three_color','#7ED321' );
 $npm_active_filter = get_option( 'npm_active_filter','0' );
 
 ?>
-<div id="npm_plugin_wrap" class="npm_content_container">
+<div id="npm_plugin_wrap" class="npm_content_container npm-09b">
 	<div id="pm-error-notice"></div>
 	<div id="controls-wrap" class="clearfix">
 		<div class="row">
@@ -117,10 +117,10 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 						$pm_quadrant = get_post_meta($post->ID,'pm_quadrant',true);
 
 						$now = new DateTime();
-						$post_date = new DateTime($post->post_date);
+						$post_modified = new DateTime($post->post_modified);
 						//write_log($now);
-						//write_log($post_date);
-						$days = date_diff($post_date, $now);
+						//write_log($post_modified);
+						$days = date_diff($post_modified, $now);
 						//write_log('$days');
 						//write_log($days);
 						$interval = $days->format('%d');
@@ -168,6 +168,7 @@ $npm_active_filter = get_option( 'npm_active_filter','0' );
 		<script>
 			var ajax_url = '<?php echo admin_url("admin-ajax.php?action="); ?>';
 		</script>
+		<div class="npm-footer-note">Built inside BLANKSPACES Santa Monica</div>
 	</div>
 
 	<?php

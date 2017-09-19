@@ -1,7 +1,7 @@
 <?php 
 /**
  * @package Neochrome_Priority_Matrix
- * @version 0.8 beta
+ * @version 0.9 beta
  */
 /*
 Plugin Name: Neochrome Priority Matrix
@@ -221,8 +221,8 @@ function pm_new_todo() {
 		$new_post = wp_insert_post($post_args);
 		if ($new_post){
 			update_post_meta($new_post,'pm_filter',$pmFilter );
-			update_post_meta($new_post,'x_pos','50' );
-			update_post_meta($new_post,'y_pos','50' );
+			update_post_meta($new_post,'x_pos','05' );
+			update_post_meta($new_post,'y_pos','04' );
 			$response = $new_post;
 		} else {
 			write_log('update todo failed');
